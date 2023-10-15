@@ -3,7 +3,7 @@ const DebridLink = require('./lib/debrid-link')
 const RealDebrid = require('./lib/real-debrid')
 const package = require("./package.json");
 
-const API_KEY_DESCRIPTION = `<div class="separator"></div><h3 class="gives">Get the API Key here :</h3> <ul><li><a href="https://real-debrid.com/apitoken" target="_blank">RealDebrid API Key</a></li><li><a href="https://debrid-link.fr/webapp/apikey" target="_blank">DebridLink API Key</a></li></ul>`
+const API_KEY_DESCRIPTION = `<div class="separator"></div><h3 class="gives">Get the API Key here :</h3> <ul><li><a href="https://real-debrid.com/apitoken" target="_blank">RealDebrid API Key</a></li><li><a href="https://debrid-link.fr/webapp/apikey" target="_blank">DebridLink API Key</a></li></ul><div class="separator"></div><p><a href="https://github.com/MrMonkey42/stremio-addon-debrid-search" target="_blank">Source Code on Github</a></p>`
 
 // Docs: https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/api/responses/manifest.md
 const manifest = {
