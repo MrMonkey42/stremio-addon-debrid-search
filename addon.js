@@ -20,7 +20,11 @@ const manifest = {
             "extra": [
                 {
                     "name": "search",
-                    "isRequired": true
+                    "isRequired": false
+                },
+                {
+                    "name": "skip",
+                    "isRequired": false
                 }
             ]
         }
@@ -72,6 +76,7 @@ builder.defineCatalogHandler((args) => {
                 reject(new Error('Invalid Debrid configuration: Missing configs'))
             }
 
+            // Search catalog request
             if (args.extra.search) {
                 let resultsPromise
                 if (args.config.DebridLinkApiKey) {
@@ -97,7 +102,29 @@ builder.defineCatalogHandler((args) => {
                     .catch(err => reject(err))
             } else {
                 // Standard catalog request
-                resolve({ metas: [] })
+                let resultsPromise
+
+                if (args.config.DebridLinkApiKey) {
+                    resultsPromise = DebridLink.listTorrents(args.config.DebridLinkApiKey, args.extra.skip)
+                } else if (args.config.DebridProvider == "DebridLink") {
+                    resultsPromise = DebridLink.listTorrents(args.config.DebridApiKey, args.extra.skip)
+                } else if (args.config.DebridProvider == "RealDebrid") {
+                    resultsPromise = RealDebrid.listTorrents(args.config.DebridApiKey, args.extra.skip)
+                } else {
+                    reject(new Error('Invalid Debrid configuration: Unknown DebridProvider'))
+                }
+
+                resultsPromise
+                    .then(metas => {
+                        console.log("Response metas: " + JSON.stringify(metas))
+                        resolve({
+                            metas: metas,
+                            cacheMaxAge: CACHE_MAX_AGE,
+                            staleRevalidate: STALE_REVALIDATE_AGE,
+                            staleError: STALE_ERROR_AGE
+                        })
+                    })
+                    .catch(err => reject(err))
             }
         } else {
             reject(new Error('Invalid catalog request'))
