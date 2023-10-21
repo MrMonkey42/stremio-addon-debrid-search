@@ -2,6 +2,8 @@ import { addonBuilder } from "stremio-addon-sdk"
 import DebridLink from './lib/debrid-link.js'
 import RealDebrid from './lib/real-debrid.js'
 import packageInfo from "./package.json" assert { type: "json" }
+import StreamProvider from './lib/stream-provider.js'
+import CatalogProvider from './lib/catalog-provider.js'
 
 const API_KEY_DESCRIPTION = `<div class="separator"></div><h3 class="gives">Get the API Key here :</h3> <ul><li><a href="https://real-debrid.com/apitoken" target="_blank">RealDebrid API Key</a></li><li><a href="https://debrid-link.fr/webapp/apikey" target="_blank">DebridLink API Key</a></li></ul><div class="separator"></div><p><a href="https://github.com/MrMonkey42/stremio-addon-debrid-search" target="_blank">Source Code on Github</a></p>`
 
@@ -30,7 +32,8 @@ const manifest = {
         }
     ],
     resources: [
-        "catalog"
+        "catalog",
+        "stream"
     ],
     types: [
         "movie",
@@ -78,18 +81,7 @@ builder.defineCatalogHandler((args) => {
 
             // Search catalog request
             if (args.extra.search) {
-                let resultsPromise
-                if (args.config.DebridLinkApiKey) {
-                    resultsPromise = DebridLink.searchTorrents(args.config.DebridLinkApiKey, args.extra.search)
-                } else if (args.config.DebridProvider == "DebridLink") {
-                    resultsPromise = DebridLink.searchTorrents(args.config.DebridApiKey, args.extra.search)
-                } else if (args.config.DebridProvider == "RealDebrid") {
-                    resultsPromise = RealDebrid.searchTorrents(args.config.DebridApiKey, args.extra.search)
-                } else {
-                    reject(new Error('Invalid Debrid configuration: Unknown DebridProvider'))
-                }
-
-                resultsPromise
+                CatalogProvider.searchTorrents(args.config, args.extra.search)
                     .then(metas => {
                         console.log("Response metas: " + JSON.stringify(metas))
                         resolve({
@@ -131,5 +123,50 @@ builder.defineCatalogHandler((args) => {
         }
     })
 })
+
+
+// Docs: https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/api/requests/defineStreamHandler.md
+builder.defineStreamHandler(args => {
+    return new Promise((resolve, reject) => {
+        if (!args.id.match(/tt\d+/i)) {
+            resolve({ streams: [] })
+        }
+
+        console.log("Request for streams with args: " + JSON.stringify(args))
+        switch (args.type) {
+            case 'movie':
+                StreamProvider.getMovieStreams(args.config, args.type, args.id)
+                    .then(streams => {
+                        console.log("Response streams: " + JSON.stringify(streams))
+                        resolve({
+                            streams: streams,
+                            cacheMaxAge: CACHE_MAX_AGE,
+                            staleRevalidate: STALE_REVALIDATE_AGE,
+                            staleError: STALE_ERROR_AGE
+                        })
+                    })
+                    .catch(err => reject(err))
+                break
+            case 'series':
+                StreamProvider.getSeriesStreams(args.config, args.type, args.id)
+                    .then(streams => {
+                        console.log("Response streams: " + JSON.stringify(streams))
+                        resolve({
+                            streams: streams,
+                            cacheMaxAge: CACHE_MAX_AGE,
+                            staleRevalidate: STALE_REVALIDATE_AGE,
+                            staleError: STALE_ERROR_AGE
+                        })
+                    })
+                    .catch(err => reject(err))
+                break
+            default:
+                results = resolve({ streams: [] })
+                break
+        }
+    })
+})
+
+
 
 export default builder.getInterface()
