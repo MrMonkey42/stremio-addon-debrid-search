@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
-const { serveHTTP, publishToCentral } = require("stremio-addon-sdk")
-const addonInterface = require("./addon")
+import StremioAddonSdk from "stremio-addon-sdk"
+const { serveHTTP, publishToCentral } = StremioAddonSdk
+import addonInterface from "./addon.js"
+
 serveHTTP(addonInterface, {
     port: process.env.PORT || 55771,
     cacheMaxAge: process.env.CACHE_MAX_AGE || 1 * 60 // 1 min

@@ -10,6 +10,7 @@
 	},
 	"author": "sbvkrishna",
 	"license": "MIT",
+	"type": "module",
 	"dependencies": {
 		"@types/node": "^18.0.6",
 		"cors": "^2.8.5",
