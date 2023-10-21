@@ -1,5 +1,5 @@
 {
-	"name": "stremio-debrid-search",
+	"name": "debrid-search",
 	"version": "0.1.2",
 	"description": "Stremio Addon to search downloads and torrents in your Debrid cloud",
 	"main": "server.js",
