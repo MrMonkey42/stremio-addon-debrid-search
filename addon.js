@@ -41,6 +41,7 @@ const manifest = {
         'anime',
         "other"
     ],
+    idPrefixes: ['tt'],
     behaviorHints: {
         configurable: true,
         configurationRequired: true
@@ -130,6 +131,7 @@ builder.defineStreamHandler(args => {
     return new Promise((resolve, reject) => {
         if (!args.id.match(/tt\d+/i)) {
             resolve({ streams: [] })
+            return
         }
 
         console.log("Request for streams with args: " + JSON.stringify(args))
