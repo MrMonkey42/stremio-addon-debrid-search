@@ -16,6 +16,11 @@ router.get('/configure', (_, res) => {
     res.end(landingHTML)
 })
 
+router.get('/ping', (_, res) => {
+    res.statusCode = 200
+    res.end()
+})
+
 export default function (req, res) {
     router(req, res, function () {
         res.statusCode = 404;
