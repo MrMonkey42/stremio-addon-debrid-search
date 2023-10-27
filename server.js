@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
 import StremioAddonSdk from "stremio-addon-sdk"
-const { serveHTTP, publishToCentral } = StremioAddonSdk
-import addonInterface from "./addon.js"
+import express from 'express'
+import serverless from './serverless.js'
 
-serveHTTP(addonInterface, {
-    port: process.env.PORT || 55771,
-    cacheMaxAge: process.env.CACHE_MAX_AGE || 1 * 60 // 1 min
+const app = express()
+
+app.use((req, res, next) => serverless(req, res, next))
+app.listen(process.env.PORT || 55771, () => {
+    console.log(`Started addon at: http://127.0.0.1:${process.env.PORT || 55771}`)
 })
 
 // https://stremio.github.io/stremio-publish-addon/index.html
