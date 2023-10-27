@@ -4,8 +4,22 @@ import express from 'express'
 import serverless from './serverless.js'
 import requestIp from 'request-ip'
 import rateLimit from 'express-rate-limit'
+import swStats from 'swagger-stats'
+import addonInterface from "./addon.js"
+import 'dotenv/config'
 
 const app = express()
+
+app.use(swStats.getMiddleware({
+    name: addonInterface.manifest.name,
+    version: addonInterface.manifest.version,
+    timelineBucketDuration: 300000,
+    authentication: true,
+    onAuthenticate: (req, username, password) => {
+        return ((username === process.env.SWAGGER_USER
+            && (password === process.env.SWAGGER_PASSWORD)))
+    },
+}))
 
 const rateLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hours
