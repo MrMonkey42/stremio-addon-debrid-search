@@ -1,6 +1,7 @@
 import { addonBuilder } from "stremio-addon-sdk"
 import DebridLink from './lib/debrid-link.js'
 import RealDebrid from './lib/real-debrid.js'
+import AllDebrid from './lib/all-debrid.js'
 import packageInfo from "./package.json" assert { type: "json" }
 import StreamProvider from './lib/stream-provider.js'
 import CatalogProvider from './lib/catalog-provider.js'
@@ -52,7 +53,7 @@ const manifest = {
             "title": "Debrid Provider",
             "type": "select",
             "required": true,
-            "options": ["RealDebrid", "DebridLink"]
+            "options": ["RealDebrid", "DebridLink", "AllDebrid"]
         },
         {
             "key": "DebridApiKey",
@@ -101,6 +102,8 @@ builder.defineCatalogHandler((args) => {
                     resultsPromise = DebridLink.listTorrents(args.config.DebridApiKey, args.extra.skip)
                 } else if (args.config.DebridProvider == "RealDebrid") {
                     resultsPromise = RealDebrid.listTorrents(args.config.DebridApiKey, args.extra.skip)
+                } else if (args.config.DebridProvider == "AllDebrid") {
+                    resultsPromise = AllDebrid.listTorrents(args.config.DebridApiKey)
                 } else {
                     reject(new Error('Invalid Debrid configuration: Unknown DebridProvider'))
                 }
