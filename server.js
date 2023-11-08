@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import express from 'express'
+import cors from 'cors'
 import serverless from './serverless.js'
 import requestIp from 'request-ip'
 import rateLimit from 'express-rate-limit'
@@ -9,6 +10,8 @@ import addonInterface from "./addon.js"
 import 'dotenv/config'
 
 const app = express()
+
+app.use(cors())
 
 app.use(swStats.getMiddleware({
     name: addonInterface.manifest.name,

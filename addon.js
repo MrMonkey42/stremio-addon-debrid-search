@@ -1,7 +1,4 @@
 import { addonBuilder } from "stremio-addon-sdk"
-import DebridLink from './lib/debrid-link.js'
-import RealDebrid from './lib/real-debrid.js'
-import AllDebrid from './lib/all-debrid.js'
 import packageInfo from "./package.json" assert { type: "json" }
 import StreamProvider from './lib/stream-provider.js'
 import CatalogProvider from './lib/catalog-provider.js'
@@ -85,37 +82,19 @@ builder.defineCatalogHandler((args) => {
                     .then(metas => {
                         console.log("Response metas: " + JSON.stringify(metas))
                         resolve({
-                            metas: metas,
-                            cacheMaxAge: CACHE_MAX_AGE,
-                            staleRevalidate: STALE_REVALIDATE_AGE,
-                            staleError: STALE_ERROR_AGE
+                            metas,
+                            ...enrichCacheParams()
                         })
                     })
                     .catch(err => reject(err))
             } else {
                 // Standard catalog request
-                let resultsPromise
-
-                if (args.config.DebridLinkApiKey) {
-                    resultsPromise = DebridLink.listTorrents(args.config.DebridLinkApiKey, args.extra.skip)
-                } else if (args.config.DebridProvider == "DebridLink") {
-                    resultsPromise = DebridLink.listTorrents(args.config.DebridApiKey, args.extra.skip)
-                } else if (args.config.DebridProvider == "RealDebrid") {
-                    resultsPromise = RealDebrid.listTorrents(args.config.DebridApiKey, args.extra.skip)
-                } else if (args.config.DebridProvider == "AllDebrid") {
-                    resultsPromise = AllDebrid.listTorrents(args.config.DebridApiKey)
-                } else {
-                    reject(new Error('Invalid Debrid configuration: Unknown DebridProvider'))
-                }
-
-                resultsPromise
+                CatalogProvider.listTorrents(args.config, args.extra.skip)
                     .then(metas => {
                         console.log("Response metas: " + JSON.stringify(metas))
                         resolve({
-                            metas: metas,
-                            cacheMaxAge: CACHE_MAX_AGE,
-                            staleRevalidate: STALE_REVALIDATE_AGE,
-                            staleError: STALE_ERROR_AGE
+                            metas,
+                            ...enrichCacheParams()
                         })
                     })
                     .catch(err => reject(err))
@@ -142,10 +121,8 @@ builder.defineStreamHandler(args => {
                     .then(streams => {
                         console.log("Response streams: " + JSON.stringify(streams))
                         resolve({
-                            streams: streams,
-                            cacheMaxAge: CACHE_MAX_AGE,
-                            staleRevalidate: STALE_REVALIDATE_AGE,
-                            staleError: STALE_ERROR_AGE
+                            streams,
+                            ...enrichCacheParams()
                         })
                     })
                     .catch(err => reject(err))
@@ -155,10 +132,8 @@ builder.defineStreamHandler(args => {
                     .then(streams => {
                         console.log("Response streams: " + JSON.stringify(streams))
                         resolve({
-                            streams: streams,
-                            cacheMaxAge: CACHE_MAX_AGE,
-                            staleRevalidate: STALE_REVALIDATE_AGE,
-                            staleError: STALE_ERROR_AGE
+                            streams,
+                            ...enrichCacheParams()
                         })
                     })
                     .catch(err => reject(err))
@@ -170,6 +145,12 @@ builder.defineStreamHandler(args => {
     })
 })
 
-
+function enrichCacheParams() {
+    return {
+        cacheMaxAge: CACHE_MAX_AGE,
+        staleRevalidate: STALE_REVALIDATE_AGE,
+        staleError: STALE_ERROR_AGE
+    }
+}
 
 export default builder.getInterface()

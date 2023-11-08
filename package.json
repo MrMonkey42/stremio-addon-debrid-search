@@ -8,7 +8,7 @@
 		"dev": "nodemon server.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
-	"author": "sbvkrishna",
+	"author": "MrMonkey42",
 	"license": "MIT",
 	"type": "module",
 	"dependencies": {
@@ -22,7 +22,7 @@
 		"fuse.js": "^6.6.2",
 		"loglevel": "^1.8.1",
 		"node-fetch": "^3.2.6",
-		"parse-torrent-title": "git://github.com/TheBeastLT/parse-torrent-title.git#aeae91e512741910bc479ac57dcb0ce78bad3ee0",
+		"parse-torrent-title": "git://github.com/TheBeastLT/parse-torrent-title.git#022408972c2a040f846331a912a6a8487746a654",
 		"prom-client": "^12.0.0",
 		"real-debrid-api": "git://github.com/TheBeastLT/node-real-debrid.git#d1f7eaa8593b947edbfbc8a92a176448b48ef445",
 		"request-ip": "^3.3.0",
