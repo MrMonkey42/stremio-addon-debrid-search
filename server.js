@@ -17,6 +17,7 @@ app.use(swStats.getMiddleware({
     name: addonInterface.manifest.name,
     version: addonInterface.manifest.version,
     timelineBucketDuration: 300000,
+    apdexThreshold: 2000,
     authentication: true,
     onAuthenticate: (req, username, password) => {
         return ((username === process.env.SWAGGER_USER
