@@ -1,71 +1,13 @@
 import { addonBuilder } from "stremio-addon-sdk"
-import packageInfo from "./package.json" assert { type: "json" }
 import StreamProvider from './lib/stream-provider.js'
 import CatalogProvider from './lib/catalog-provider.js'
-
-// Docs: https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/api/responses/manifest.md
-const manifest = {
-    id: "community.stremio.debrid-search",
-    version: packageInfo.version,
-    name: "Debrid Search",
-    description: packageInfo.description,
-    background: `https://i.ibb.co/VtSfFP9/t8wVwcg.jpg`,
-    logo: `https://img.icons8.com/fluency/256/search-in-cloud.png`,
-    catalogs: [
-        {
-            "id": "debridsearch",
-            "type": "other",
-            "extra": [
-                {
-                    "name": "search",
-                    "isRequired": false
-                },
-                {
-                    "name": "skip",
-                    "isRequired": false
-                }
-            ]
-        }
-    ],
-    resources: [
-        "catalog",
-        "stream"
-    ],
-    types: [
-        "movie",
-        "series",
-        'anime',
-        "other"
-    ],
-    idPrefixes: ['tt'],
-    behaviorHints: {
-        configurable: true,
-        configurationRequired: true
-    },
-
-    // Ref - https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/api/responses/manifest.md#user-data
-    config: [
-        {
-            "key": "DebridProvider",
-            "title": "Debrid Provider",
-            "type": "select",
-            "required": true,
-            "options": ["RealDebrid", "DebridLink", "AllDebrid"]
-        },
-        {
-            "key": "DebridApiKey",
-            "title": "Debrid API Key",
-            "type": "text",
-            "required": true
-        },
-    ]
-}
+import { getManifest } from './lib/util/manifest.js'
 
 const CACHE_MAX_AGE = parseInt(process.env.CACHE_MAX_AGE) || 1 * 60 // 1 min
 const STALE_REVALIDATE_AGE = 1 * 60 // 1 min
 const STALE_ERROR_AGE = 1 * 24 * 60 * 60 // 1 days
 
-const builder = new addonBuilder(manifest)
+const builder = new addonBuilder(getManifest())
 
 builder.defineCatalogHandler((args) => {
     return new Promise((resolve, reject) => {

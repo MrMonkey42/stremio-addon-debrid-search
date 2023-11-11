@@ -10,13 +10,13 @@ import addonInterface from "./addon.js"
 import 'dotenv/config'
 
 const app = express()
-
+app.enable('trust proxy')
 app.use(cors())
 
 app.use(swStats.getMiddleware({
     name: addonInterface.manifest.name,
     version: addonInterface.manifest.version,
-    timelineBucketDuration: 300000,
+    timelineBucketDuration: 60 * 60 * 1000,
     apdexThreshold: 2000,
     authentication: true,
     onAuthenticate: (req, username, password) => {
