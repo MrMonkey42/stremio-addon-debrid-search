@@ -11,7 +11,11 @@ const builder = new addonBuilder(getManifest())
 
 builder.defineCatalogHandler((args) => {
     return new Promise((resolve, reject) => {
-        console.log("Request for catalog with args: " + JSON.stringify(args))
+        const debugArgs = structuredClone(args)
+        if (args.config?.DebridApiKey)
+            debugArgs.config.DebridApiKey = '*'.repeat(args.config.DebridApiKey.length)
+        console.log("Request for catalog with args: " + JSON.stringify(debugArgs))
+
         // Request to Debrid Search
         if (args.id == 'debridsearch') {
             if (!((args.config?.DebridProvider && args.config?.DebridApiKey) || args.config?.DebridLinkApiKey)) {
@@ -56,7 +60,11 @@ builder.defineStreamHandler(args => {
             return
         }
 
-        console.log("Request for streams with args: " + JSON.stringify(args))
+        const debugArgs = structuredClone(args)
+        if (args.config?.DebridApiKey)
+            debugArgs.config.DebridApiKey = '*'.repeat(args.config.DebridApiKey.length)
+        console.log("Request for streams with args: " + JSON.stringify(debugArgs))
+
         switch (args.type) {
             case 'movie':
                 StreamProvider.getMovieStreams(args.config, args.type, args.id)
