@@ -2,12 +2,12 @@
 
 import express from 'express'
 import cors from 'cors'
+import 'dotenv/config'
 import serverless from './serverless.js'
 import requestIp from 'request-ip'
 import rateLimit from 'express-rate-limit'
 import swStats from 'swagger-stats'
 import addonInterface from "./addon.js"
-import 'dotenv/config'
 
 const app = express()
 app.enable('trust proxy')

@@ -39,8 +39,7 @@ builder.defineCatalogHandler((args) => {
                     .then(metas => {
                         console.log("Response metas: " + JSON.stringify(metas))
                         resolve({
-                            metas,
-                            ...enrichCacheParams()
+                            metas
                         })
                     })
                     .catch(err => reject(err))
@@ -98,7 +97,6 @@ builder.defineStreamHandler(args => {
 function enrichCacheParams() {
     return {
         cacheMaxAge: CACHE_MAX_AGE,
-        staleRevalidate: STALE_REVALIDATE_AGE,
         staleError: STALE_ERROR_AGE
     }
 }
