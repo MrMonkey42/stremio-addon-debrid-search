@@ -54,7 +54,7 @@ router.get(`/:configuration?/:resource/:type/:id/:extra?.json`, (req, res, next)
         })
 })
 
-router.get('/resolve/:debridProvider/:debridApiKey/:hostUrl', (req, res) => {
+router.get('/resolve/:debridProvider/:debridApiKey/:id/:hostUrl', (req, res) => {
     StreamProvider.resolveUrl(req.params.debridProvider, req.params.debridApiKey, decode(req.params.hostUrl))
         .then(url => {
             res.redirect(url)
