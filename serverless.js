@@ -44,7 +44,7 @@ router.get(`/:configuration?/:resource/:type/:id/:extra?.json`, (req, res, next)
                 .map(prop => Number.isInteger(resp[prop]) && cacheHeaders[prop] + '=' + resp[prop])
                 .filter(val => !!val).join(', ')
 
-            res.setHeader('Cache-Control', `${cacheControl}, public`)
+            res.setHeader('Cache-Control', `${cacheControl}, private`)
             res.setHeader('Content-Type', 'application/json; charset=utf-8')
             res.end(JSON.stringify(resp))
         })
