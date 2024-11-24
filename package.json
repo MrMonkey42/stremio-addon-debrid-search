@@ -1,6 +1,6 @@
 {
 	"name": "debrid-search",
-	"version": "0.1.8",
+	"version": "0.1.9",
 	"description": "Stremio Addon to search downloads and torrents in your Debrid cloud",
 	"main": "server.js",
 	"scripts": {
@@ -22,10 +22,10 @@
 		"fuse.js": "^6.6.2",
 		"loglevel": "^1.8.1",
 		"node-fetch": "^3.2.6",
-		"parse-torrent-title": "git://github.com/TheBeastLT/parse-torrent-title.git#022408972c2a040f846331a912a6a8487746a654",
+		"parse-torrent-title": "git://github.com/TheBeastLT/parse-torrent-title.git#b98e2ba2fb64fd5fa1c34c620bd9050bbc2e271d",
 		"premiumize-api": "^1.0.3",
 		"prom-client": "^12.0.0",
-		"real-debrid-api": "git://github.com/DavidRayner/node-real-debrid.git#901deb352f058797548dee874dcc8890abaf85b6",
+		"real-debrid-api": "git://github.com/MrMonkey42/node-real-debrid.git#ea885a01e64c5543cda289c7fd1e8981d8c7d650",
 		"request-ip": "^3.3.0",
 		"stremio-addon-sdk": "^1.6.10",
 		"swagger-stats": "^0.99.7",
