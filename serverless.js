@@ -4,6 +4,7 @@ import landingTemplate from "./lib/util/landingTemplate.js"
 import StreamProvider from './lib/stream-provider.js'
 import { decode } from 'urlencode'
 import qs from 'querystring'
+import requestIp from 'request-ip'
 import { getManifest } from './lib/util/manifest.js'
 import { parseConfiguration } from './lib/util/configuration.js'
 import { BadTokenError, BadRequestError, AccessDeniedError } from './lib/util/error-codes.js'
@@ -55,7 +56,8 @@ router.get(`/:configuration?/:resource/:type/:id/:extra?.json`, (req, res, next)
 })
 
 router.get('/resolve/:debridProvider/:debridApiKey/:id/:hostUrl', (req, res) => {
-    StreamProvider.resolveUrl(req.params.debridProvider, req.params.debridApiKey, decode(req.params.hostUrl))
+    const clientIp = requestIp.getClientIp(req)
+    StreamProvider.resolveUrl(req.params.debridProvider, req.params.debridApiKey, decode(req.params.hostUrl), clientIp)
         .then(url => {
             res.redirect(url)
         })
