@@ -57,7 +57,7 @@ router.get(`/:configuration?/:resource/:type/:id/:extra?.json`, (req, res, next)
 
 router.get('/resolve/:debridProvider/:debridApiKey/:id/:hostUrl', (req, res) => {
     const clientIp = requestIp.getClientIp(req)
-    StreamProvider.resolveUrl(req.params.debridProvider, req.params.debridApiKey, decode(req.params.hostUrl), clientIp)
+    StreamProvider.resolveUrl(req.params.debridProvider, req.params.debridApiKey, req.params.id, decode(req.params.hostUrl), clientIp)
         .then(url => {
             res.redirect(url)
         })
